@@ -1,10 +1,15 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { supabaseClient } from '../lib/client';
-import Navbar from '../components/Navbar/navbar';
+import Navbar from '../components/navbar/navbar';
+import ManageTodo from '../components/manage-todo/manage-todo';
+import { useDisclosure } from '@chakra-ui/hooks';
 
 export default function Home() {
+  const initialRef = useRef();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const router = useRouter();
   const user = supabaseClient.auth.user();
 
@@ -23,7 +28,8 @@ export default function Home() {
       </Head>
 
       <main>
-        <Navbar />
+        <Navbar onOpen={onOpen} />
+        <ManageTodo isOpen={isOpen} onClose={onClose} initialRef={initialRef} />
       </main>
     </div>
   );
